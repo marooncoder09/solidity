@@ -529,7 +529,9 @@ bool CommandLineInterface::parseArguments(int _argc, char const* const* _argv)
 
 bool CommandLineInterface::processInput()
 {
-	if (m_options.input.mode == InputMode::StandardJson)
+	switch (m_options.input.mode)
+	{
+	case InputMode::StandardJson:
 	{
 		solAssert(m_standardJsonInput.has_value(), "");
 
@@ -538,20 +540,24 @@ bool CommandLineInterface::processInput()
 		m_standardJsonInput.reset();
 		return true;
 	}
-
-	if (m_options.input.mode == InputMode::Assembler)
+	case InputMode::Assembler:
+	{
 		return assemble(
 			m_options.assembly.inputLanguage,
 			m_options.assembly.targetMachine,
 			m_options.optimizer.enabled,
 			m_options.optimizer.yulSteps
 		);
-
-	if (m_options.input.mode == InputMode::Linker)
+	}
+	case InputMode::Linker:
 		return link();
+	case InputMode::Compiler:
+	case InputMode::CompilerWithASTImport:
+		return compile();
+	}
 
-	solAssert(m_options.input.mode == InputMode::Compiler || m_options.input.mode == InputMode::CompilerWithASTImport, "");
-	return compile();
+	solAssert(false, "");
+	return false;
 }
 
 bool CommandLineInterface::compile()
