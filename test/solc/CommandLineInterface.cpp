@@ -61,7 +61,7 @@ OptionsReaderAndMessages parseCommandLineAndReadInputFiles(vector<string> const&
 	size_t argc = commandLine.size();
 	vector<char const*> argv(commandLine.size() + 1);
 
-	// argv[argc] typically contains NULL
+	// C++ standard mandates argv[argc] to be NULL
 	argv[argc] = nullptr;
 
 	for (size_t i = 0; i < argc; ++i)
