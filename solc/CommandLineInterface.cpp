@@ -430,7 +430,7 @@ bool CommandLineInterface::readInputFiles()
 		else
 		{
 			m_fileReader.setSource(infile, move(fileContent));
-			m_fileReader.allowDirectory(boost::filesystem::path(boost::filesystem::canonical(infile).string()).remove_filename());
+			m_fileReader.allowDirectory(boost::filesystem::canonical(infile).remove_filename());
 		}
 	}
 
@@ -445,7 +445,7 @@ bool CommandLineInterface::readInputFiles()
 			m_fileReader.setSource(g_stdinFileName, readUntilEnd(m_sin));
 	}
 
-	if (m_fileReader.sourceCodes().size() == 0 && !m_standardJsonInput.has_value())
+	if (m_fileReader.sourceCodes().empty() && !m_standardJsonInput.has_value())
 	{
 		serr() << "All specified input files either do not exist or are not regular files." << endl;
 		return false;
